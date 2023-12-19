@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>YY</title>
+</head>
+<body>
+<div style="height: 180px; white-space: pre; text-align: center;">
+    <div>
+        选择阵营后,输入自己名称再点击按钮,点一次就行了. 身份有两种 无 / 内
+
+        <select id="mySelect">
+            <option value="blue">蓝色方</option>
+            <option value="red">红色方</option>
+        </select><input type="text" id="myInput"/><button id="myButton">抽取身份</button>
+    </div>
+</div>
+<div id="myDiv" style="height: 700px; white-space: pre; text-align: center;"></div>
+</body>
+<script>
+
+    var submitButton = document.getElementById("myButton");
+    var myDiv = document.getElementById("myDiv");
+    var mySelect = document.getElementById("mySelect");
+    var myInput = document.getElementById("myInput");
+
+
+    submitButton.addEventListener("click", function () {
+        var inputData = myInput.value;
+        var camp = mySelect.options[mySelect.selectedIndex].value;
+        sendGetRequest(inputData, camp);
+    });
+
+    function sendGetRequest(data, camp) {
+        var encodedData = encodeURIComponent(data);
+        fetch('http://localhost:8080/game?name=' + encodedData + "&camp=" + camp)
+            .then(response => response.text())
+            .then(data => {
+                if (data != null) {
+                    myDiv.textContent = data
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+</script>
+</html>
